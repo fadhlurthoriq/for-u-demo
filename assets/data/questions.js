@@ -1,7 +1,7 @@
 const QuestionData = [
   {
     type: "emoji",
-    question: "Neyy, do u still love me",
+    question: "Lorem ipsum dolor sit.  ",
     mochiDialog: { emotion: "shy", message: "jawab jujur ya, aku beneran mau tau 🙈" },
     options: [
       { id: 1, emoji: "😐", label: "NOO NOO" },
@@ -13,7 +13,7 @@ const QuestionData = [
   },
   {
     type: "yesno",
-    question: "Maafin aku ya sayaang buat semua kesalahanku. Mau lanjut atau berhenti, aku terima pilihan kamu..",
+    question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut.    ",
     mochiDialog: { emotion: "hopeful", message: "maaf yaa sedikit kuusilin hehe.." },
     options: {
       yes: "Iya kumaafin, tapi jgn gitu lagi",
