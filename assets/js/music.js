@@ -25,6 +25,7 @@ Music.init = function () {
     this.progressFill = document.getElementById("player-progress-fill");
     this.timeCurrentEl = document.getElementById("player-time-current");
     this.timeTotalEl = document.getElementById("player-time-total");
+    this.expandBtn = document.getElementById("player-expand-btn");
 
     this.bind();
     this.bindVisibility();
@@ -34,17 +35,46 @@ Music.init = function () {
 
 Music.bind = function () {
 
-    this.toggleEl.onclick = () => this.togglePlay();
-    this.playPauseEl.onclick = () => this.togglePlay();
+    this.toggleEl.onclick = (e) => {
+        e.stopPropagation();
+        this.togglePlay();
+    };
+    this.playPauseEl.onclick = (e) => {
+        e.stopPropagation();
+        this.togglePlay();
+    };
 
-    this.nextEl.onclick = () => this.playNext();
-    this.prevEl.onclick = () => this.playPrev();
+    if (this.expandBtn) {
+        this.expandBtn.onclick = (e) => {
+            e.stopPropagation();
+            this.player.classList.toggle("expanded");
+        };
+    }
+
+    // Tap/click header or player card toggles expanded controls
+    this.player.addEventListener("click", (e) => {
+        if (e.target.closest(".player-control") ||
+            e.target.closest(".player-btn") ||
+            e.target.closest(".player-progress-bar") ||
+            e.target.closest(".player-expand-btn")) {
+            return;
+        }
+        this.player.classList.toggle("expanded");
+    });
+
+    this.nextEl.onclick = (e) => {
+        e.stopPropagation();
+        this.playNext();
+    };
+    this.prevEl.onclick = (e) => {
+        e.stopPropagation();
+        this.playPrev();
+    };
 
     this.audio.addEventListener("timeupdate", () => this.updateProgress());
     this.audio.addEventListener("loadedmetadata", () => this.updateDuration());
     this.audio.addEventListener("ended", () => this.playNext(true));
 
-    // ⬇️ TAMBAH INI: ikon & status selalu ngikutin kejadian asli di <audio>
     this.audio.addEventListener("play", () => {
         this.isPlaying = true;
         this.updateIcons();
@@ -57,7 +87,10 @@ Music.bind = function () {
         this.savePlaying();
     });
 
-    this.progressBar.onclick = (e) => this.seek(e);
+    this.progressBar.onclick = (e) => {
+        e.stopPropagation();
+        this.seek(e);
+    };
 
 };
 
@@ -153,10 +186,19 @@ Music.togglePlay = function () {
 
 Music.updateIcons = function () {
 
-    const icon = this.audio.paused ? "▶" : "⏸";
+    const isPaused = this.audio ? this.audio.paused : true;
+    const icon = isPaused ? "▶" : "⏸";
 
-    this.toggleEl.innerHTML = icon;
-    this.playPauseEl.innerHTML = icon;
+    if (this.toggleEl) this.toggleEl.innerHTML = icon;
+    if (this.playPauseEl) this.playPauseEl.innerHTML = icon;
+
+    if (this.player) {
+        if (!isPaused) {
+            this.player.classList.add("is-playing");
+        } else {
+            this.player.classList.remove("is-playing");
+        }
+    }
 
 };
 

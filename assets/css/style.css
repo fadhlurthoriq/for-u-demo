@@ -378,39 +378,7 @@ section {
 }
 
 .mobile-warning {
-  display: none;
-}
-
-@media (max-width: 1100px) {
-  #story {
-    display: none;
-  }
-
-  #floating-layer {
-    display: none;
-  }
-
-  .mobile-warning {
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    position: fixed;
-
-    inset: 0;
-
-    background: #fdf6ec;
-
-    z-index: 99999;
-
-    font-size: 22px;
-
-    text-align: center;
-
-    padding: 30px;
-  }
+  display: none !important;
 }
 
 /*==========================
@@ -965,138 +933,187 @@ GALLERY ENGINE
 
 #gallery-scene {
   opacity: 0;
-
   width: 100%;
-
   height: 100vh;
-
-  overflow: hidden;
-
-  justify-content: center;
-
-  align-items: center;
-
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
   transition: opacity 0.8s ease;
+  position: relative;
 }
 
 #gallery-scene.reveal {
   opacity: 1;
 }
 
-#gallery-container {
+#gallery-scene::-webkit-scrollbar {
+  width: 8px;
+}
+
+#gallery-scene::-webkit-scrollbar-track {
+  background: rgba(255, 230, 235, 0.4);
+}
+
+#gallery-scene::-webkit-scrollbar-thumb {
+  background: #ffb8c6;
+  border-radius: 10px;
+}
+
+.gallery-timeline-container {
   width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 95px 16px 140px;
+  position: relative;
+  box-sizing: border-box;
+}
 
+.timeline-header {
+  text-align: center;
+  margin-bottom: 35px;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(255, 141, 161, 0.15);
+  color: #e87a8f;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(255, 141, 161, 0.3);
+}
+
+.timeline-title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(26px, 5vw, 38px);
+  color: var(--text, #333);
+  margin-bottom: 8px;
+}
+
+.timeline-subtitle {
+  font-size: clamp(13px, 2.8vw, 15px);
+  color: var(--text-light, #777);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Winding Area & SVG Curve (iPhone 17-1) */
+.gallery-winding-area {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gallery-path-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
 
+.gallery-polaroid-track {
+  position: relative;
+  z-index: 2;
   display: flex;
+  flex-direction: column;
+  gap: 65px;
+  width: 100%;
+  padding: 25px 0 70px;
+  box-sizing: border-box;
+}
 
-  align-items: center;
+/* Staggered Organic Wandering Positions */
+.polaroid-item {
+  position: relative;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+}
 
-  justify-content: center;
+.polaroid-item.pos-right {
+  justify-content: flex-end;
+  padding-right: 14%;
+}
+.polaroid-item.pos-left {
+  justify-content: flex-start;
+  padding-left: 12%;
+}
+.polaroid-item.pos-mid-right {
+  justify-content: flex-end;
+  padding-right: 25%;
+}
+.polaroid-item.pos-far-left {
+  justify-content: flex-start;
+  padding-left: 5%;
+}
+.polaroid-item.pos-right-tilt {
+  justify-content: flex-end;
+  padding-right: 10%;
+}
+.polaroid-item.pos-mid-left {
+  justify-content: flex-start;
+  padding-left: 22%;
+}
+.polaroid-item.pos-left-tilt {
+  justify-content: flex-start;
+  padding-left: 15%;
+}
+.polaroid-item.pos-center-right {
+  justify-content: flex-end;
+  padding-right: 20%;
+}
 
+/* Classic Polaroid Card */
+.polaroid-card {
+  background: #ffffff;
+  padding: 10px 10px 24px 10px;
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
+  width: 155px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.3s ease;
+}
+
+.polaroid-item:nth-child(odd) .polaroid-card {
+  transform: rotate(-2.5deg);
+}
+
+.polaroid-item:nth-child(even) .polaroid-card {
+  transform: rotate(2deg);
+}
+
+.polaroid-card:hover {
+  transform: scale(1.08) rotate(0deg) translateY(-4px) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22) !important;
+  z-index: 10;
+}
+
+.polaroid-photo-frame {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0edf0;
   position: relative;
 }
 
-#gallery-viewport {
+.polaroid-img {
   width: 100%;
-
-  overflow: hidden;
-}
-
-#gallery-track {
-  display: flex;
-
-  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
-}
-
-.gallery-item {
-  width: 100vw;
-
-  flex-shrink: 0;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-}
-
-.gallery-photo {
-  width: auto;
-
-  max-width: 82vw;
-
-  max-height: 82vh;
-
-  object-fit: contain;
-
-  border-radius: 28px;
-
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
-
-  cursor: pointer;
-
-  transition: 0.35s;
-}
-
-.gallery-photo:hover {
-  transform: scale(1.02);
-}
-
-.gallery-arrow {
-  position: absolute;
-
-  width: 62px;
-
-  height: 62px;
-
-  border: none;
-
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.85);
-
-  backdrop-filter: blur(10px);
-
-  cursor: pointer;
-
-  font-size: 30px;
-
-  z-index: 20;
-
-  transition: 0.3s;
-}
-
-.gallery-arrow:hover {
-  transform: scale(1.08);
-}
-
-#gallery-prev {
-  left: 35px;
-}
-
-#gallery-next {
-  right: 35px;
-}
-
-.gallery-arrow:disabled {
-  opacity: 0.3;
-
-  cursor: not-allowed;
-}
-
-#gallery-progress {
-  position: absolute;
-
-  bottom: 30px;
-
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  font-size: 18px;
-
-  font-weight: 600;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .gallery-scene-mochi, .letter-scene-mochi {
@@ -1447,32 +1464,33 @@ JOURNEY TRANSITION
   top: 50%;
   transform: translate(-50%, -50%) scale(0.6);
 
-  width: 420px;
-  height: 95px;
+  width: min(420px, calc(100vw - 28px));
+  height: 66px;
 
-  border-radius: 28px;
+  border-radius: 22px;
 
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.85);
 
   display: flex;
   flex-direction: column;
-  padding: 18px 24px;
+  padding: 10px 16px;
   box-shadow:
-    0 20px 45px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 16px 36px rgba(220, 100, 130, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   opacity: 0;
   visibility: hidden;
   overflow: hidden;
   z-index: 9999;
   will-change: transform, left, top, height;
-  transition: height 0.35s ease;
+  transition: height 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .player-photo-bg {
   position: absolute;
-  inset: -25px; /* biar pas di-blur nggak keliatan tepinya */
+  inset: -25px;
   background-size: cover;
   background-position: center;
   filter: blur(35px) saturate(160%);
@@ -1484,225 +1502,266 @@ JOURNEY TRANSITION
 .player-glass-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.55)); 
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65)); 
   z-index: 1;
 }
 
+#music-player.expanded,
 #music-player:hover {
-  height: 210px;
+  height: 168px;
+  box-shadow: 0 20px 45px rgba(220, 100, 130, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
 .player-main {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 14px;
   flex-shrink: 0;
+  height: 46px;
 }
 
 .player-main,
 .player-expand {
-  position: relative; /* biar tetap di atas 2 layer baru */
+  position: relative;
   z-index: 2;
 }
 
-#music-player:hover #player-toggle {
-  display: none;
-}
-
 .player-cover {
-
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 141, 161, 0.25);
   background-position: center;
   overflow: hidden;
-  
-  width: 60px;
-
-  height: 60px;
-
-  border-radius: 18px;
-
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
   color: white;
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(220, 100, 130, 0.2);
+  transition: transform 0.3s ease;
+}
 
-  font-size: 28px;
+#music-player.is-playing .player-cover {
+  animation: vinylRotate 14s linear infinite;
+}
+
+@keyframes vinylRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .player-info {
   flex: 1;
   min-width: 0;
-  padding-right: 10px;
+  padding-right: 6px;
 }
 
 .player-info h3 {
-  font-size: 16px;
-  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--text, #333);
 }
 
 .player-info p {
-  font-size: 13px;
+  font-size: 11px;
+  color: #b06b7c;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .player-control {
-  width: 52px;
-
-  height: 52px;
-
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-
-  background: #e8899b;;
-
+  background: #ff8da1;
   color: white;
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   cursor: pointer;
+  flex-shrink: 0;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(255, 141, 161, 0.35);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.player-control:hover {
+  transform: scale(1.08);
+  background: #ff758f;
+}
+
+.player-expand-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 141, 161, 0.15);
+  color: #d85c76;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1), background 0.2s ease;
+}
+
+.player-expand-btn:hover {
+  background: rgba(255, 141, 161, 0.25);
+}
+
+#music-player.expanded .player-expand-btn,
+#music-player:hover .player-expand-btn {
+  transform: rotate(180deg);
 }
 
 .player-expand {
-  margin-top: 18px;
+  margin-top: 14px;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.25s ease 0.1s;
 }
 
+#music-player.expanded .player-expand,
 #music-player:hover .player-expand {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .player-progress {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: 11px;
   color: #b98a94;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .player-progress-bar {
   flex: 1;
-  height: 5px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.55);
+  height: 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.65);
   cursor: pointer;
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .player-progress-fill {
   height: 100%;
   width: 0%;
-  background: #e8899b;;
-  border-radius: 5px;
+  background: linear-gradient(90deg, #ff8da1, #ff6f89);
+  border-radius: 6px;
+  transition: width 0.15s ease;
 }
 
 .player-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 22px;
 }
 
 .player-btn {
   border: none;
   background: none;
-  font-size: 20px;
-  color: #e8899b;
+  font-size: 18px;
+  color: #ff8da1;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.player-btn:hover {
+  transform: scale(1.15);
 }
 
 .player-btn-main {
-  width: 46px;
-  height: 46px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: #e8899b;
+  background: #ff8da1;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(255, 141, 161, 0.35);
+}
+
+.player-btn-main:hover {
+  background: #ff758f;
+  transform: scale(1.08);
 }
 
 #music-player.show {
-  animation: playerAppear 0.8s forwards;
+  animation: playerAppearTop 0.8s forwards cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-@keyframes playerAppear {
+@keyframes playerAppearTop {
   from {
     opacity: 0;
-
     transform: translate(-50%, -50%) scale(0.6);
   }
-
   to {
     opacity: 1;
-
     visibility: visible;
-
-    transform: translate(-50%, -50%) scale(1);
+    top: 16px;
+    transform: translate(-50%, 0) scale(1);
   }
 }
 
 #music-player.float {
-  animation: playerFloat 1.3s forwards;
+  animation: playerFloatTop 1.2s forwards cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-@keyframes playerFloat {
+@keyframes playerFloatTop {
   0% {
     opacity: 1;
     visibility: visible;
-
     left: 50%;
     top: 50%;
-
     transform: translate(-50%, -50%) scale(1);
   }
-
   100% {
     opacity: 1;
     visibility: visible;
-
-    left: calc(100% - 30px);
-    top: 30px;
-
-    transform: translate(-100%, 0) scale(0.72);
+    left: 50%;
+    top: 16px;
+    transform: translate(-50%, 0) scale(1);
   }
 }
 
 /*=========================
 GALLERY POPUP*==========================*/
 
+/*=========================
+GALLERY POPUP (3D FLIP CARD - IPHONE 17-2 & 17-3)
+==========================*/
+
 #gallery-popup {
   position: fixed;
   inset: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background: rgba(20, 20, 20, 0.45);
-  backdrop-filter: blur(18px);
-
+  background: rgba(15, 15, 15, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   opacity: 0;
   visibility: hidden;
-
-  transition: 0.35s;
-
+  transition: opacity 0.35s ease, visibility 0.35s ease;
   z-index: 10000;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 #gallery-popup.show {
@@ -1710,257 +1769,190 @@ GALLERY POPUP*==========================*/
   visibility: visible;
 }
 
-#gallery-popup-card {
-  width: min(1200px, 90vw);
-  height: min(760px, 90vh);
-
-  display: flex;
-
-  overflow: hidden;
-
-  background: white;
-
-  border-radius: 32px;
-
+.gallery-popup-wrapper {
   position: relative;
-
-  transform: scale(0.92);
-
-  transition: 0.35s;
-
-  opacity: 0;
-
-  transform: scale(0.95) translateY(20px);
-
-  transition:
-    opacity 0.35s ease,
-    transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  width: min(390px, 92vw);
+  height: min(520px, 82vh);
+  perspective: 1200px;
 }
 
-#gallery-popup.show #gallery-popup-card {
-  opacity: 1;
-
-  transform: scale(1) translateY(0);
-}
-
-#gallery-popup-image {
+.gallery-popup-card {
+  position: relative;
   width: 100%;
   height: 100%;
-
-  object-fit: contain;
-
-  opacity: 0;
-
-  transform: scale(0.96);
-
-  transition:
-    opacity 0.45s ease 0.15s,
-    transform 0.45s ease 0.15s;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-#gallery-popup.show #gallery-popup-image {
-  opacity: 1;
-
-  transform: scale(1);
+.gallery-popup-card.is-flipped {
+  transform: rotateY(180deg);
 }
 
-.gallery-popup-content {
-  padding: 30px;
-
-  scroll-behavior: smooth;
-}
-
-.gallery-popup-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.gallery-popup-content::-webkit-scrollbar-thumb {
-  background: #ddd;
-
-  border-radius: 20px;
-}
-
-.gallery-popup-right {
-  flex: 1;
-
-  display: flex;
-
-  flex-direction: column;
-
+.gallery-popup-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
-
-  padding: 40px 45px;
-
-  overflow-y: auto;
-}
-
-.gallery-popup-story {
-  flex: 1;
-
-  overflow-y: auto;
-
-  padding-right: 10px;
-}
-
-#gallery-popup-title {
-  font-size: 36px;
-  margin-bottom: 10px;
-  opacity: 0;
-
-  transform: translateY(12px);
-
-  transition: 0.35s 0.25s;
-}
-
-#gallery-popup-date {
-  color: #999;
-
-  margin-bottom: 1px;
-
-  opacity: 0;
-
-  transform: translateY(12px);
-
-  transition: 0.35s 0.35s;
-}
-
-#gallery-popup-memory {
-  line-height: 2;
-
-  white-space: pre-line;
-
-  opacity: 0;
-
-  transform: translateY(12px);
-
-  transition: 0.35s 0.45s;
-}
-
-#gallery-popup.show #gallery-popup-title,
-#gallery-popup.show #gallery-popup-date,
-#gallery-popup.show #gallery-popup-memory {
-  opacity: 1;
-
-  transform: translateY(0);
-}
-
-.gallery-popup-mochi {
-  flex-shrink: 0;
-
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.22);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   display: flex;
-
-  align-items: flex-end;
-
-  gap: 15px;
-
-  padding-top: 16px;
-
-  margin-top: 16px;
-
-  border-top: 1px solid #eee;
-
-  padding-bottom: 12px;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-#gallery-popup.show .gallery-popup-mochi {
-  opacity: 1;
-
-  transform: translateY(0);
+/* SISI DEPAN (FOTO - IPHONE 17-2) */
+.gallery-popup-front {
+  transform: rotateY(0deg);
+  padding: 16px 16px 12px;
 }
 
-#gallery-popup-mochi-image {
-  width: 95px;
-
-  margin-bottom: -8px;
-
-  flex-shrink: 0;
-
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-}
-
-.gallery-video-thumb {
-  position: relative;
-
-  display: inline-flex;
+.popup-photo-frame {
+  flex: 1;
+  width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #141414;
+  display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
+  position: relative;
 }
 
-.gallery-video-thumb .gallery-photo {
+#gallery-popup-image,
+#gallery-popup-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
-.gallery-play-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  width: 64px;
-  height: 64px;
-
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-
+/* Navigasi Lingkaran (←) (→) */
+.popup-nav-row {
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
 
+.popup-nav-circle-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid #888;
+  background: transparent;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.popup-nav-circle-btn.is-disabled {
+  opacity: 0.25;
+  cursor: default;
+  border-color: #ccc;
+  color: #ccc;
+}
+
+.popup-nav-circle-btn.is-active:hover {
+  border-color: #111;
+  color: #111;
+  transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* SISI BELAKANG (CERITA & MOCHI - IPHONE 17-3) */
+.gallery-popup-back {
+  transform: rotateY(180deg);
+  padding: 28px 24px 14px;
+}
+
+.popup-story-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.popup-story-content::-webkit-scrollbar {
+  width: 5px;
+}
+.popup-story-content::-webkit-scrollbar-thumb {
+  background: #e2cad0;
+  border-radius: 10px;
+}
+
+#gallery-popup-title {
+  font-family: "Poppins", sans-serif;
   font-size: 24px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 4px;
+}
 
+#gallery-popup-date {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+#gallery-popup-memory {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #333;
+  white-space: pre-line;
+}
+
+.popup-back-footer {
+  position: relative;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gallery-popup-mochi {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
   pointer-events: none;
 }
 
-.gallery-popup-face-show {
-  opacity: 1;
-
-  transform: scale(1);
-}
-
-.gallery-popup-face-hide {
-  opacity: 0;
-
-  transform: scale(0.9);
+#gallery-popup-mochi-image {
+  width: 60px;
+  height: auto;
+  display: block;
 }
 
 #gallery-popup-mochi-bubble {
-  position: relative;
-
-  background: #fff6f8;
-
-  padding: 14px 18px;
-
-  border-radius: 18px;
-
-  line-height: 1.7;
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  background: #fff0f3;
+  border: 1px solid #ffd4dc;
+  color: #222;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  max-width: 200px;
   opacity: 0;
-
-  color: #222 !important;
-
-  transform: translateY(12px);
-
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
-
-  margin-bottom: 18px;
-}
-
-#gallery-popup-mochi-bubble {
-  opacity: 0;
-  transform: translateY(12px);
-
-  transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
+  transform: translateY(8px);
+  transition: all 0.25s ease;
 }
 
 #gallery-popup-mochi-bubble.gallery-popup-bubble-show {
@@ -1968,48 +1960,43 @@ GALLERY POPUP*==========================*/
   transform: translateY(0);
 }
 
-#gallery-popup-mochi-bubble::before {
-  content: "";
-
-  position: absolute;
-
-  left: -8px;
-
-  bottom: 18px;
-
-  width: 18px;
-
-  height: 18px;
-
-  background: #fff6f8;
-
-  transform: rotate(45deg);
+.gallery-popup-face-show {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-#gallery-popup-close {
+.gallery-popup-face-hide {
+  opacity: 0 !important;
+  transform: scale(0.9) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-popup-close {
   position: absolute;
-
-  top: 25px;
-  right: 25px;
-
-  width: 45px;
-  height: 45px;
-
-  border: none;
-
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-
-  background: white;
-
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #333;
   cursor: pointer;
-
   z-index: 20;
-
-  transition: 0.3s;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
-#gallery-popup-close:hover {
-  transform: rotate(90deg) scale(1.1);
+.gallery-popup-close:hover {
+  transform: scale(1.1);
+  background: #ffffff;
+  color: #000;
 }
 
 #gallery-end-card {
@@ -3082,3 +3069,614 @@ ENDING SCENE
 .float-path-14 { animation: floatPath14 28s linear infinite; animation-delay: -4s;  }
 .float-path-15 { animation: floatPath15 23s linear infinite; animation-delay: -10s; }
 .float-path-16 { animation: floatPath16 25s linear infinite; animation-delay: -19s; }
+
+
+/*=================================
+LETTER SCENE — Layout Fix
+=================================*/
+
+#letter-scene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/*=================================
+DESKTOP GALLERY — Horizontal Slider
+=================================*/
+
+#gallery-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+#gallery-viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+#gallery-track {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.gallery-item {
+  width: 100vw;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-photo {
+  width: auto;
+  max-width: 82vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.14);
+  cursor: pointer;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.gallery-photo:hover {
+  transform: scale(1.02);
+  box-shadow: 0 28px 60px rgba(0,0,0,0.2);
+}
+
+.gallery-video-thumb {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.gallery-video-thumb .gallery-photo {
+  display: block;
+}
+
+.gallery-arrow {
+  position: absolute;
+  width: 62px;
+  height: 62px;
+  border: none;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 50%;
+  font-size: 28px;
+  color: #333;
+  z-index: 20;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-arrow:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+#gallery-prev { left: 32px; }
+#gallery-next { right: 32px; }
+
+.gallery-arrow:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+#gallery-progress {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+/*=================================
+DUAL-MODE GALLERY — Show / Hide
+=================================*/
+
+/* Desktop (>768px): show slider, hide mobile timeline */
+@media (min-width: 769px) {
+  #gallery-container,
+  #gallery-progress {
+    display: flex;
+  }
+
+  #gallery-timeline-container {
+    display: none !important;
+  }
+
+  #gallery-scene.active {
+    display: block; /* override .scene default for gallery */
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+/* Mobile (≤768px): hide slider, show mobile timeline */
+@media (max-width: 768px) {
+  #gallery-container,
+  #gallery-progress {
+    display: none !important;
+  }
+
+  #gallery-timeline-container {
+    display: block !important;
+  }
+
+  /* Gallery scene should scroll vertically on mobile */
+  #gallery-scene.active {
+    display: block !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100vh;
+  }
+}
+
+/*======================================================
+  RESPONSIVE MOBILE STYLES (TIMELINE, MOCHI, MUSIC, SCENES)
+======================================================*/
+
+@media (max-width: 768px) {
+  /* --- Global Floating & Character Layer --- */
+  #character-layer,
+  .gallery-scene-mochi,
+  .letter-scene-mochi,
+  .question-scene-mochi {
+    left: 12px !important;
+    bottom: 12px !important;
+    width: 85px !important;
+    height: 85px !important;
+    z-index: 95 !important;
+    pointer-events: none !important;
+  }
+
+  #character-wrapper {
+    width: 85px !important;
+  }
+
+  #character-image,
+  #gallery-scene-mochi-image,
+  #letter-scene-mochi-image,
+  #question-scene-mochi-image {
+    width: 100% !important;
+  }
+
+  #character-bubble,
+  #gallery-scene-mochi-bubble,
+  #letter-scene-mochi-bubble,
+  #question-scene-mochi-bubble {
+    bottom: 92px !important;
+    left: 0 !important;
+    transform: none !important;
+    max-width: calc(100vw - 32px) !important;
+    width: max-content !important;
+    min-width: 140px !important;
+    padding: 10px 14px !important;
+    font-size: 13px !important;
+    border-radius: 18px !important;
+    pointer-events: auto !important;
+    box-shadow: 0 10px 25px rgba(220, 100, 130, 0.16) !important;
+  }
+
+  #character-bubble::after,
+  #character-bubble::before,
+  #gallery-scene-mochi-bubble::before,
+  #letter-scene-mochi-bubble::before,
+  #question-scene-mochi-bubble::before {
+    left: 42px !important;
+    transform: none !important;
+  }
+
+  /* --- Top Music Player (Mobile) --- */
+  #music-player {
+    top: 12px !important;
+    width: calc(100vw - 24px) !important;
+    max-width: 420px !important;
+    height: 60px !important;
+    padding: 8px 12px !important;
+    border-radius: 20px !important;
+  }
+
+  #music-player.expanded {
+    height: 156px !important;
+  }
+
+  .player-main {
+    height: 44px !important;
+    gap: 10px !important;
+  }
+
+  .player-cover {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 12px !important;
+    font-size: 18px !important;
+  }
+
+  .player-info h3 {
+    font-size: 13px !important;
+  }
+
+  .player-info p {
+    font-size: 10px !important;
+  }
+
+  .player-control {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 13px !important;
+  }
+
+  .player-expand-btn {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 10px !important;
+  }
+
+  .player-expand {
+    margin-top: 10px !important;
+  }
+
+  .player-progress {
+    font-size: 10px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .player-btn-main {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 14px !important;
+  }
+
+  .player-buttons {
+    gap: 18px !important;
+  }
+
+  /* --- Gallery Timeline Album (Mobile) --- */
+  .gallery-timeline-container {
+    padding: 85px 12px 120px !important;
+  }
+
+  .timeline-header {
+    margin-bottom: 30px !important;
+  }
+
+  .timeline-tag {
+    font-size: 11px !important;
+    padding: 4px 12px !important;
+  }
+
+  .timeline-title {
+    font-size: 26px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .timeline-subtitle {
+    font-size: 13px !important;
+  }
+
+  .gallery-timeline-container {
+    padding: 85px 12px 110px !important;
+  }
+
+  .timeline-header {
+    margin-bottom: 25px !important;
+  }
+
+  .timeline-tag {
+    font-size: 11px !important;
+    padding: 4px 12px !important;
+  }
+
+  .timeline-title {
+    font-size: 24px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .timeline-subtitle {
+    font-size: 13px !important;
+  }
+
+  .gallery-polaroid-track {
+    gap: 50px !important;
+    padding: 15px 0 50px !important;
+  }
+
+  .polaroid-card {
+    width: 135px !important;
+    padding: 8px 8px 20px 8px !important;
+    border-radius: 12px !important;
+  }
+
+  /* --- Gallery Popup 3D Flip Card (Mobile) --- */
+  .gallery-popup-wrapper {
+    width: min(350px, 92vw) !important;
+    height: min(480px, 78vh) !important;
+  }
+
+  .gallery-popup-face {
+    border-radius: 24px !important;
+  }
+
+  .gallery-popup-front {
+    padding: 14px 14px 10px !important;
+  }
+
+  .popup-photo-frame {
+    border-radius: 16px !important;
+  }
+
+  .gallery-popup-back {
+    padding: 24px 20px 12px !important;
+  }
+
+  #gallery-popup-title {
+    font-size: 21px !important;
+  }
+
+  #gallery-popup-date {
+    font-size: 12px !important;
+    margin-bottom: 12px !important;
+  }
+
+  #gallery-popup-memory {
+    font-size: 13px !important;
+    line-height: 1.65 !important;
+  }
+
+  .popup-nav-row {
+    height: 48px !important;
+    gap: 14px !important;
+  }
+
+  .popup-nav-circle-btn {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  #gallery-popup-mochi-image {
+    width: 52px !important;
+  }
+
+  #gallery-popup-mochi-bubble {
+    font-size: 11px !important;
+    padding: 6px 10px !important;
+    bottom: 52px !important;
+  }
+
+  .gallery-popup-close {
+    top: 10px !important;
+    right: 10px !important;
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 13px !important;
+  }
+
+  /* --- Login Scene (Mobile) --- */
+  .login-card {
+    width: min(390px, calc(100vw - 28px)) !important;
+    padding: 28px 18px !important;
+    border-radius: 22px !important;
+    gap: 14px !important;
+  }
+
+  .login-card h1 {
+    font-size: 22px !important;
+  }
+
+  .login-card p {
+    font-size: 13px !important;
+  }
+
+  .input-group input {
+    height: 50px !important;
+    font-size: 14px !important;
+  }
+
+  #login-btn {
+    padding: 13px !important;
+    font-size: 15px !important;
+  }
+
+  /* --- Welcome Scene (Mobile) --- */
+  #welcome-card {
+    width: min(360px, calc(100vw - 28px)) !important;
+    min-height: auto !important;
+    max-height: 84vh !important;
+    padding: 80px 20px 30px !important;
+    gap: 16px !important;
+    overflow-y: auto !important;
+  }
+
+  #envelope {
+    width: min(290px, 80vw) !important;
+  }
+
+  #letter {
+    width: min(240px, 70vw) !important;
+  }
+
+  #card-letter {
+    width: 140px !important;
+  }
+
+  #welcome-card h1 {
+    font-size: 22px !important;
+  }
+
+  #welcome-card p {
+    font-size: 13px !important;
+  }
+
+  #start-story {
+    padding: 12px 26px !important;
+    font-size: 14px !important;
+  }
+
+  /* --- Letter Scene (Mobile) --- */
+  #letter-stack {
+    width: min(380px, calc(100vw - 28px)) !important;
+    height: min(480px, 66vh) !important;
+  }
+
+  .letter-card {
+    padding: 26px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .letter-card h2 {
+    font-size: 22px !important;
+  }
+
+  .letter-card h3 {
+    font-size: 13px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .letter-card p {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+    max-height: 240px !important;
+    overflow-y: auto !important;
+  }
+
+  #letter-progress {
+    top: 72px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    font-size: 12px !important;
+  }
+
+  #letter-end-overlay {
+    padding: 20px !important;
+  }
+
+  #letter-end-mochi {
+    width: 120px !important;
+  }
+
+  #letter-end-buttons button {
+    padding: 12px 24px !important;
+    font-size: 14px !important;
+  }
+
+  /* --- Question Scene (Mobile) --- */
+  #question-scene {
+    padding: 80px 14px 105px !important;
+    gap: 14px !important;
+    overflow-y: auto !important;
+    justify-content: flex-start !important;
+  }
+
+  #question-progress {
+    width: min(360px, calc(100vw - 32px)) !important;
+    margin-top: 10px !important;
+  }
+
+  #question-stack {
+    width: min(390px, calc(100vw - 24px)) !important;
+  }
+
+  .question-card {
+    min-height: 280px !important;
+    border-radius: 22px !important;
+  }
+
+  .question-top {
+    padding: 22px 16px !important;
+  }
+
+  .question-top h2 {
+    font-size: 18px !important;
+  }
+
+  .question-option {
+    padding: 13px 16px !important;
+    font-size: 13px !important;
+  }
+
+  .question-emoji-row {
+    padding: 18px 10px !important;
+    gap: 10px !important;
+    justify-content: center !important;
+  }
+
+  .question-emoji-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+  }
+
+  .question-yesno-zone {
+    min-height: 160px !important;
+    padding: 16px !important;
+  }
+
+  .question-yes-btn,
+  .question-no-btn {
+    padding: 11px 22px !important;
+    font-size: 13px !important;
+  }
+
+  /* --- Ending Scene (Mobile) --- */
+  #ending-gift-stage {
+    width: min(280px, 80vw) !important;
+  }
+
+  #ending-gift-image {
+    width: min(180px, 55vw) !important;
+  }
+
+  .ending-hint {
+    font-size: 13px !important;
+  }
+
+  #ending-thanks-card,
+  #ending-qr-card {
+    width: min(380px, calc(100vw - 28px)) !important;
+    max-height: 84vh !important;
+    overflow-y: auto !important;
+    padding: 26px 18px !important;
+    border-radius: 24px !important;
+  }
+
+  #ending-thanks-text {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+  }
+
+  #ending-mochi,
+  #ending-farewell-mochi {
+    width: 75px !important;
+  }
+
+  #ending-qr-image {
+    width: 170px !important;
+    height: 170px !important;
+  }
+
+  .ending-float-photo {
+    width: 46px !important;
+    height: 46px !important;
+    opacity: 0.45 !important;
+  }
+}

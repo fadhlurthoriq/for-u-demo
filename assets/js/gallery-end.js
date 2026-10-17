@@ -5,13 +5,13 @@ GalleryEnd.init = function () {
     this.btnAgain = document.getElementById("gallery-end-again");
     this.btnContinue = document.getElementById("gallery-end-continue");
 
-    this.btnAgain.onclick = () => this.again();
-    this.btnContinue.onclick = () => this.continueJourney();
+    if (this.btnAgain)    this.btnAgain.onclick    = () => this.again();
+    if (this.btnContinue) this.btnContinue.onclick = () => this.continueJourney();
 };
 
 GalleryEnd.show = function () {
     Overlay.showFocus();
-    this.card.classList.add("card-show"); // ⬅️ reuse class yang udah ada
+    this.card.classList.add("card-show");
 };
 
 GalleryEnd.hide = function (callback) {
@@ -19,23 +19,56 @@ GalleryEnd.hide = function (callback) {
     this.card.classList.remove("card-show");
     this.card.classList.add("hide");
 
-    this.card.addEventListener("animationend", () => {
+    let completed = false;
+    let fallbackTimer;
+
+    const finish = () => {
+        if (completed) return;
+
+        completed = true;
+        clearTimeout(fallbackTimer);
+        this.card.removeEventListener("animationend", onAnimationEnd);
         this.card.classList.remove("hide");
         if (callback) callback();
-    }, { once: true });
+    };
+
+    const onAnimationEnd = (event) => {
+        if (event.target === this.card) finish();
+    };
+
+    this.card.addEventListener("animationend", onAnimationEnd);
+    fallbackTimer = setTimeout(finish, 800);
 };
 
 GalleryEnd.again = function () {
-    this.hide(() => {
+    const doAgain = () => {
         Gallery.current = 0;
-        Gallery.update();
+        Gallery.updateDesktop();
         Gallery.save();
-        GalleryCharacter.playForPhoto(0, "idle"); // munculin bubble dialog index 1
-    });
+
+        // Scroll mobile winding area back to top
+        const galleryScene = document.getElementById("gallery-scene");
+        if (galleryScene) galleryScene.scrollTo({ top: 0, behavior: "smooth" });
+
+        const timelineContainer = document.getElementById("gallery-timeline-container");
+        if (timelineContainer) timelineContainer.scrollTo({ top: 0, behavior: "smooth" });
+
+        GalleryCharacter.playForPhoto(0, "idle");
+    };
+
+    if (this.card && this.card.classList.contains("card-show")) {
+        this.hide(doAgain);
+    } else {
+        doAgain();
+    }
 };
 
 GalleryEnd.continueJourney = function () {
-    this.hide(() => {
-        Scene.show("letter-scene"); // scene baru, masih kosong
-    });
+    if (this.card && this.card.classList.contains("card-show")) {
+        this.hide(() => {
+            Scene.show("letter-scene");
+        });
+    } else {
+        Scene.show("letter-scene");
+    }
 };

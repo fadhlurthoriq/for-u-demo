@@ -170,8 +170,20 @@ Letter.bind = function () {
   scene.addEventListener("wheel", (e) => this.onWheel(e), { passive: false });
 };
 
+
 Letter.enter = function () {
   this.current = 0;
+
+  // Re-query cards each time we enter, to be safe
+  if (!this.cards || !this.cards.length) {
+    this.cards = document.querySelectorAll(".letter-card");
+  }
+
+  // If still no cards somehow, re-render
+  if (!this.cards || !this.cards.length) {
+    this.render();
+  }
+
   this.applyPositions();
   this.showHint();
 
